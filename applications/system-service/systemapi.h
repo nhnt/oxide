@@ -86,9 +86,11 @@ public:
        powerOffInhibitors(),
        mutex(),
        touches(),
-       swipeStates() {
+       swipeStates(),
+       swipeLengths() {
         for(short i = Right; i <= Down; i++){
             swipeStates[(SwipeDirection)i] = true;
+            swipeLengths[(SwipeDirection)i] = 30;
         }
         settings.sync();
         singleton(this);
