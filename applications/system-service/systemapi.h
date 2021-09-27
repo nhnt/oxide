@@ -208,6 +208,60 @@ public:
         toggleSwipeEnabled((SwipeDirection)direction);
     }
     void toggleSwipeEnabled(SwipeDirection direction){ setSwipeEnabled(direction, !getSwipeEnabled(direction)); }
+    Q_INVOKABLE void setSwipeLength(int direction, int length){
+        int maxLength;
+        if(!hasPermission("system")){
+            return;
+        }
+        if(direction <= SwipeDirection::None || direction > SwipeDirection::Down){
+            qDebug() << "Invalid swipe direction: " << direction;
+            return;
+        }
+        if (direction == SwipeDirection::Up || direction == SwipeDirection::Down){
+            maxLength = 1872;
+        }
+        else{
+            maxLength = 1404;
+        }
+        if (length < 0 || length > maxLength){
+            qDebug() << "Invalid swipe length: " << direction;
+            return;
+        }
+        setSwipeLength((SwipeDirection)direction, length);
+    }
+    void setSwipeLength(SwipeDirection direction, int length){
+        if (direction == None){
+            return;
+        }
+        switch(direction){
+            case Left:
+                qDebug() << "Swipe Left Length: " << length;
+                break;
+            case Right:
+                qDebug() << "Swipe Right Length: " << length;
+                break;
+            case Up:
+                qDebug() << "Swipe Up Length: " << length;
+                break;
+            case Down:
+                qDebug() << "Swipe Down Length: " << length;
+                break;
+            default:
+                return;
+        }
+        swipeLengths[direction] = length;
+    }
+    Q_INVOKABLE int getSwipeLength(int direction){
+        if(!hasPermission("system")){
+            return false;
+        }
+        if(direction <= SwipeDirection::None || direction > SwipeDirection::Down){
+            qDebug() << "Invalid swipe direction: " << direction;
+            return false;
+        }
+        return getSwipeLength(direction);
+    }
+    int getSwipeLength(SwipeDirection direction){ return swipeLengths[direction]; }
 public slots:
     void suspend(){
         if(sleepInhibited()){
