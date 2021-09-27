@@ -14,9 +14,6 @@
 #include "digitizerhandler.h"
 #include "login1_interface.h"
 
-
-#define GESTURE_LENGTH 30
-
 #define systemAPI SystemAPI::singleton()
 
 typedef org::freedesktop::login1::Manager Manager;
@@ -416,6 +413,7 @@ private:
     QPoint location;
     QPoint startLocation;
     QMap<SwipeDirection, bool> swipeStates;
+    QMap<SwipeDirection, int> swipeLengths;
 
     void inhibitSleep(){
         inhibitors.append(Inhibitor(systemd, "sleep", qApp->applicationName(), "Handle sleep screen"));
@@ -553,14 +551,14 @@ private:
         }
         auto touch = touches.first();
         if(swipeDirection == Up){
-            if(!swipeStates[Up] || touch->y < location.y() || touch->y - startLocation.y() < GESTURE_LENGTH){
+            if(!swipeStates[Up] || touch->y < location.y() || touch->y - startLocation.y() < swipeLengths[Up]){
                 // Must end swiping up and having gone far enough
                 cancelSwipe(touch);
                 return;
             }
             emit bottomAction();
         }else if(swipeDirection == Down){
-            if(!swipeStates[Down] || touch->y > location.y() || startLocation.y() - touch->y < GESTURE_LENGTH){
+            if(!swipeStates[Down] || touch->y > location.y() || startLocation.y() - touch->y < swipeLengths[Down]){
                 // Must end swiping down and having gone far enough
                 cancelSwipe(touch);
                 return;
@@ -568,8 +566,8 @@ private:
             emit topAction();
         }else if(swipeDirection == Right || swipeDirection == Left){
             auto isRM2 = deviceSettings.getDeviceType() == DeviceSettings::RM2;
-            auto invalidLeft = !swipeStates[Left] || touch->x < location.x() || touch->x - startLocation.x() < GESTURE_LENGTH;
-            auto invalidRight = !swipeStates[Right] || touch->x > location.x() || startLocation.x() - touch->x < GESTURE_LENGTH;
+            auto invalidLeft = !swipeStates[Left] || touch->x < location.x() || touch->x - startLocation.x() < swipeLengths[Left];
+            auto invalidRight = !swipeStates[Right] || touch->x > location.x() || startLocation.x() - touch->x < swipeLengths[Right];
             if(swipeDirection == Right && (isRM2 ? invalidLeft : invalidRight)){
                 // Must end swiping right and having gone far enough
                 cancelSwipe(touch);
