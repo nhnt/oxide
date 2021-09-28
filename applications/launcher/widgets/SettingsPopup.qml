@@ -154,6 +154,24 @@ Item {
                     Layout.preferredWidth: 300
                 }
             }
+            RowLayout {
+                Layout.columnSpan: parent.columns
+                Layout.preferredWidth: parent.width
+                Label {
+                    text: "Gesture Swipe Length (pixels)"
+                    Layout.fillWidth: true
+                }
+                BetterSpinBox {
+                    id: swipeLengthSpinBox
+                    objectName: "swipeLengthSpinBox"
+                    from: 10
+                    to: 2000
+                    stepSize: 10
+                    value: controller.swipeLength
+                    onValueChanged: controller.swipeLength = this.value
+                    Layout.preferredWidth: 300
+                }
+            }
             Item {
                 Layout.rowSpan: 6
                 Layout.columnSpan: parent.columns

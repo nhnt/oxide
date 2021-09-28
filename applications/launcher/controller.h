@@ -35,6 +35,7 @@ class Controller : public QObject
     Q_OBJECT
     Q_PROPERTY(bool automaticSleep MEMBER m_automaticSleep WRITE setAutomaticSleep NOTIFY automaticSleepChanged);
     Q_PROPERTY(int columns MEMBER m_columns WRITE setColumns NOTIFY columnsChanged);
+    Q_PROPERTY(int swipeLength MEMBER m_swipeLength WRITE setSwipeLength NOTIFY swipeLengthChanged);
     Q_PROPERTY(bool showWifiDb MEMBER m_showWifiDb WRITE setShowWifiDb NOTIFY showWifiDbChanged);
     Q_PROPERTY(bool showBatteryPercent MEMBER m_showBatteryPercent WRITE setShowBatteryPercent NOTIFY showBatteryPercentChanged);
     Q_PROPERTY(bool showBatteryTemperature MEMBER m_showBatteryTemperature WRITE setShowBatteryTemperature NOTIFY showBatteryTemperatureChanged);
@@ -245,6 +246,10 @@ public:
         return m_columns;
     };
     void setColumns(int);
+    int swipeLength() const {
+        return m_swipeLength;
+    };
+    void setSwipeLength(int);
     bool showWifiDb() const {
         return m_showWifiDb;
     };
@@ -343,6 +348,7 @@ signals:
     void reload();
     void automaticSleepChanged(bool);
     void columnsChanged(int);
+    void swipeLengthChanged(int);
     void fontSizeChanged(int);
     void showWifiDbChanged(bool);
     void showBatteryPercentChanged(bool);
@@ -621,6 +627,7 @@ private:
     void checkUITimer();
     bool m_automaticSleep = true;
     int m_columns = 6;
+    int m_swipeLength = 30;
     int m_fontSize = 23;
     int m_sleepAfter;
     bool m_showWifiDb = false;

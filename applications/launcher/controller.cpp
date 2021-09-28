@@ -15,7 +15,7 @@
 #include "controller.h"
 #include "dbusservice_interface.h"
 
-QSet<QString> settings = { "columns", "autoStartApplication" };
+QSet<QString> settings = { "columns", "autoStartApplication", "swipeLength" };
 QSet<QString> booleanSettings {"showWifiDb", "showBatteryPercent", "showBatteryTemperature", "showDate" };
 QList<QString> configDirectoryPaths = { "/opt/etc/draft", "/etc/draft", "/home/root /.config/draft" };
 QList<QString> configFileDirectoryPaths = { "/opt/etc", "/etc", "/home/root /.config" };
@@ -84,6 +84,12 @@ void Controller::loadSettings(){
         qDebug() << "Can't find columnsSpinBox";
     }else{
         columnsSpinBox->setProperty("value", columns());
+    }
+    QObject* swipeLengthSpinBox = root->findChild<QObject*>("swipeLengthSpinBox");
+    if(!swipeLengthSpinBox){
+        qDebug() << "Can't find swipeLengthSpinBox";
+    }else{
+        swipeLengthSpinBox->setProperty("value", swipeLength());
     }
     QObject* sleepAfterSpinBox = root->findChild<QObject*>("sleepAfterSpinBox");
     if(!sleepAfterSpinBox){
@@ -369,6 +375,10 @@ void Controller::setColumns(int columns){
         qDebug() << "Columns: " << columns;
         emit columnsChanged(columns);
     }
+}
+void Controller::setSwipeLength(int length){
+    m_swipeLength = length;
+    systemApi->setAllSwipeLengths(length);
 }
 void Controller::setShowWifiDb(bool state){
     m_showWifiDb = state;
