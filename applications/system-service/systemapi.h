@@ -231,6 +231,11 @@ public:
         }
         setSwipeLength((SwipeDirection)direction, length);
     }
+    Q_INVOKABLE void setAllSwipeLengths(int length){
+        for(short i = Right; i <= Down; i++){
+            setSwipeLength(i, length);
+        }
+    }
     void setSwipeLength(SwipeDirection direction, int length){
         if (direction == None){
             return;

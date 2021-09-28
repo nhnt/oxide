@@ -66,5 +66,8 @@
       <arg type="i" direction="out"/>
       <arg name="direction" type="i" direction="in"/>
     </method>
+    <method name="setAllSwipeLengths">
+      <arg name="length" type="i" direction="in"/>
+    </method>
   </interface>
 </node>
